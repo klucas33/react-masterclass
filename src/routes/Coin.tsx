@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { Routes, Route, Outlet } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHome } from "@fortawesome/free-solid-svg-icons";
 import Chart from "./Chart";
 import Price from "./Price";
 
@@ -73,6 +75,33 @@ const Tab = styled.span<{ isActive: boolean }>`
     props.isActive ? props.theme.accentColor : props.theme.textColor};
   a {
     display: block;
+  }
+`;
+
+const NavigationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 30px;
+  left: 30px;
+`;
+
+export const NavigationIcon = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: ${(props) => props.theme.textColor};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  &:hover {
+    cursor: pointer;
+  }
+  svg {
+    font-size: 22px;
+    background-color: inherit;
+    color: ${(props) => props.theme.bgColor};
   }
 `;
 
@@ -175,6 +204,13 @@ function Coin() {
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
+      <NavigationContainer>
+        <NavigationIcon>
+          <Link to={"/"}>
+            <FontAwesomeIcon icon={faHome} />
+          </Link>
+        </NavigationIcon>
+      </NavigationContainer>
       <Helmet>
         <title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
@@ -200,7 +236,7 @@ function Coin() {
             </OverviewItem>
             <OverviewItem>
               <span>Price:</span>
-              <span>${tickersData?.quotes.USD.price /* .toFixed(3) */}</span>
+              <span>${tickersData?.quotes?.USD?.price?.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>
